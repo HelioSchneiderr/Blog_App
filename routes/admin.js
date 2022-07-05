@@ -27,6 +27,22 @@ router.get(`/categories/add`, (req, res) => {
 
 router.post("/categories/nova", (req, res) =>{
 
+    let erros = [];
+    
+    if(!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null){
+        erros.push({texto: "Nome Invalido"})
+    };
+
+    if(!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null){
+        erros.push({texto: "Slug Invalido"})
+    };
+
+    if(req.body.nome.length < 2){
+        erros.push({texto: "Nome da Categoria muito pequeno"})
+    }
+    
+    
+
     const newCategorie = {
         nome: req.body.nome,
         slug: req.body.slug
