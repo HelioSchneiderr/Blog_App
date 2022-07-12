@@ -16,4 +16,4 @@ const Categorie = new Schema({
     }
 })
 
-mongoose.model("categories", Categorie)
+mongoose.model("categories", Categorie);
