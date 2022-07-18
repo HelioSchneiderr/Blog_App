@@ -8,6 +8,10 @@
     const mongoose = require("mongoose")
     const session = require("express-session")
     const flash = require("connect-flash")
+    require("./models/Postagens")
+    const Postagem = mongoose.model("postagens")
+    require("./models/Categorie")
+    const Categorie = mongoose.model("categories")
  
 
 //Configuration
@@ -54,12 +58,42 @@
         app.use(express.static(path.join(__dirname, "public")));
 
         app.use((req, res, next) => {
-            console.log("Oi eu sou um middleware");
             next();
         })
 
 
 //Routes
+
+app.get('/', (req, res) => {
+    Postagem.find().lean().populate("categoria").sort({data: 'desc'}).then((postagens) => {
+        res.render("index", {postagens: postagens})
+    }).catch((err) => {
+        req.flash("error_msg", "Não foi possível carregar os posts")
+        res.redirect("/404")
+    })
+})
+
+app.get("/postagem/:slug", (req, res) => {
+    Postagem.findOne({slug: req.params.slug}).lean().then((postagens)=>{
+        if(postagens){
+            res.render("postagens/index", {postagens:postagens})
+        
+        }else{
+            req.flash("error_msg", "Esta postagem não existe")
+            res.redirect("/")
+        }
+    }).catch((err) =>{
+        req.flash("error_msg", "Houve um erro interno")
+        res.redirect("/")
+    })
+})
+
+    app.get("/categorias", (req, res) =>{
+        Categoria.find().lean().then((categories)=>{
+            res.render("categorias/index")
+        })
+    })
+
     app.use("/admin", admin)
 
     //Others

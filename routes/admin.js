@@ -173,4 +173,13 @@ router.get("/postagens/edit/:id", (req, res) => {
 
 })
 
+router.get("/postagens/deletar/:id", (req, res)=>{
+    Postagem.remove({_id: req.params.id}).lean().then(()=>{
+        res.redirect("/admin/postagens")
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro interno")
+        res.redirect("/admin/postagens")
+    }) 
+})
+
 module.exports = router;
