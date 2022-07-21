@@ -12,6 +12,7 @@
     const Postagem = mongoose.model("postagens")
     require("./models/Categorie")
     const Categorie = mongoose.model("categories")
+    const usuarios = require("./routes/usuario")
  
 
 //Configuration
@@ -100,7 +101,7 @@ app.get("/postagem/:slug", (req, res) => {
     app.get("/categorias/:slug", (req, res)=>{
         Categorie.findOne({slug: req.params.slug}).lean().then((categories)=>{
             if(categories){
-                Postagem.find({categories: categories._id}).lean().then((postagens) =>{
+                Postagem.find({categoria: categories._id}).lean().then((postagens) =>{
                     res.render("categorias/postagem", {postagens: postagens, categories: categories})
                 }).catch((err) => {
                     req.flash("error_msg", "Houve um erro ao listar os posts")
@@ -117,6 +118,7 @@ app.get("/postagem/:slug", (req, res) => {
     })
 
     app.use("/admin", admin)
+    app.use("/usuarios", usuarios)
 
     //Others
 
