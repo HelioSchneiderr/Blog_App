@@ -115,7 +115,7 @@ router.get("/postagens", (req, res) => {
     })
 })
 
-router.get("/postagens/add",eAdmin, (req, res) => {
+router.get("/postagens/add", eAdmin, (req, res) => {
 
     Categoria.find().lean().then((categories) => {
         res.render("admin/addpostagens", { categories: categories })
@@ -164,7 +164,7 @@ router.get("/postagens/edit/:id",eAdmin, (req, res) => {
             res.render("admin/editpostagens", { categories: categories, postagens: postagens })
         }).catch((err) => {
             req.flash("error_msg", "Houve um erro ao listar as categorias")
-            res, redirect("/admin/postagens")
+            res.redirect("/admin/postagens")
         })
 
     }).catch((err) => {
